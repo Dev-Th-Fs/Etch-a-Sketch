@@ -1,5 +1,22 @@
 const container = document.querySelector(".container");
 const btn = document.querySelector("#select-grid");
+const resetBtn = document.querySelector("#reset-grid");
+
+// let mouseDown = false;
+
+// container.addEventListener('mousedown',() => {
+//   mouseDown = true;
+// });
+
+// container.addEventListener('mouseup',() => {
+//   mouseDown = false;
+// });
+
+let changeColor = false;
+
+container.addEventListener("click", () => {
+  changeColor = !changeColor;
+});
 
 const createGrid = (width = 16, height = 16) => {
   const containerWidth = container.clientWidth;
@@ -13,27 +30,62 @@ const createGrid = (width = 16, height = 16) => {
     divs.classList.add("grid-box");
     divs.style.width = `${width}px`;
     divs.style.height = `${height}px`;
+
     container.appendChild(divs);
+
+    divs.addEventListener("mouseover", () => {
+      if (changeColor) {
+        divs.style.backgroundColor = "red";
+      }
+    });
+
+    divs.addEventListener("dblclick", () => {
+      divs.style.backgroundColor = "lightblue";
+    });
+
+    // divs.addEventListener('mouseover', () => {
+    //   if(mouseDown){
+    //     divs.style.backgroundColor = "red";
+    //   }
+    // })
   }
 };
 
 createGrid();
 
+let width = 16;
+
+function userInput() {
+  width = parseInt(prompt("Enter grid box size (less than 100): "), 10);
+  while (width > 100) {
+    width = parseInt(prompt("Enter grid box size (less than 100): "), 10);
+  }
+  return width;
+}
+
 btn.addEventListener("click", () => {
-  let width = parseInt(prompt("Enter width of the box: "), 10);
-  let height = parseInt(prompt("Enter height of the box: "), 10);
+
+  boxWidth = userInput();
+  boxHeight = boxWidth;
 
   container.textContent = "";
 
-  if (width === null || width === "" || isNaN(width)) {
-    width = 16;
+  if (boxWidth === null || boxWidth === "" || isNaN(boxWidth)) {
+    boxWidth = 16;
   }
-  if (height === null || height === "" || isNaN(height)) {
-    height = 16;
+  if (boxHeight === null || boxHeight === "" || isNaN(boxHeight)) {
+    boxHeight = 16;
   }
- createGrid(width, height)
-
-
+  createGrid(boxWidth, boxHeight);
+  
 });
+
+resetBtn.addEventListener("click", () => {
+  const height = width;
+  container.textContent = "";
+  createGrid(width, height);
+ 
+});
+
 
 
